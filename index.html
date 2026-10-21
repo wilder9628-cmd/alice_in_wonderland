@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>MT 초대장</title>
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        body {
+            font-family: 'Pretendard', -apple-system, BlinkMacSystemFont, system-ui, Roboto, sans-serif;
+            background-color: #050608;
+            color: #f1f5f9;
+            margin: 0;
+            padding: 0;
+            overflow-x: hidden;
+        }
+
+        /* 캐릭터 부드러운 이동을 위한 스타일 */
+        .scroll-move {
+            will-change: transform;
+            /* 더 느리고 부드럽게 감속되도록 transition 조정 */
+            transition: transform 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+        }
+    </style>
+</head>
+<body class="min-h-screen flex justify-center items-center">
+
+    <!-- 모바일 초대장 프레임 (배경: back.png) -->
+    <main class="relative w-full max-w-[480px] min-h-[150vh] bg-black/60 shadow-2xl flex flex-col items-center px-6 pt-12 pb-16 bg-cover bg-center justify-start"
+          style="background-image: linear-gradient(rgba(5, 6, 8, 0.3), rgba(5, 6, 8, 0.5)), url('back.png');">
+
+        <!-- 1. 제일 상단: 메인 제목 (title.png) -->
+        <header class="w-full max-w-[280px] mt-4 mb-8">
+            <img src="title.png" alt="MT Title" class="w-full h-auto mx-auto object-contain drop-shadow-[0_10px_20px_rgba(0,0,0,0.8)]">
+        </header>
+
+        <!-- 2. 제목 아래: 앨리스(왼쪽)와 토끼(오른쪽) 캐릭터 배치 -->
+        <section class="w-full flex items-center justify-between gap-4 px-2 my-12">
+            <!-- 왼쪽: 앨리스 (alice.png) -->
+            <div class="w-1/2 flex justify-center">
+                <img src="alice.png" alt="Alice" class="scroll-move max-w-[160px] w-full h-auto object-contain drop-shadow-[0_8px_16px_rgba(0,0,0,0.7)]">
+            </div>
+
+            <!-- 오른쪽: 토끼 (rabbit.png) -->
+            <div class="w-1/2 flex justify-center">
+                <img src="rabbit.png" alt="Rabbit" class="scroll-move max-w-[160px] w-full h-auto object-contain drop-shadow-[0_8px_16px_rgba(0,0,0,0.7)]">
+            </div>
+        </section>
+
+        <!-- 스크롤 확인용 공간 -->
+        <div class="mt-32 text-center text-xs text-purple-200/50">
+            <p>스크롤을 내리면 캐릭터가 천천히 중앙으로 이동합니다</p>
+        </div>
+
+    </main>
+
+    <!-- 스크롤 애니메이션 스크립트 -->
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const characters = document.querySelectorAll('.scroll-move');
+            
+            // 처음 시작 위치 (왼쪽으로 -50px 이동된 상태)
+            const initialLeftOffset = -50; 
+            // 스크롤 이동 민감도 (작을수록 느리게 이동)
+            const speedFactor = 0.08; 
+
+            let ticking = false;
+
+            function updatePosition() {
+                const scrollY = window.scrollY || window.pageYOffset;
+
+                // 시작 offset(-50px)에서 스크롤할수록 오른쪽(+)으로 천천히 중앙(0px)까지 이동
+                const moveX = Math.min(initialLeftOffset + (scrollY * speedFactor), 0);
+
+                characters.forEach(char => {
+                    char.style.transform = `translateX(${moveX}px)`;
+                });
+
+                ticking = false;
+            }
+
+            // 초기 시작 위치 세팅
+            updatePosition();
+
+            window.addEventListener('scroll', () => {
+                if (!ticking) {
+                    window.requestAnimationFrame(updatePosition);
+                    ticking = true;
+                }
+            });
+        });
+    </script>
+</body>
+</html>
