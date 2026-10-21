@@ -1,0 +1,142 @@
+<!DOCTYPE html>
+<html lang="ko" class="h-full">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>MT 초대장</title>
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        /* HTML/BODY 스크롤 스냅 설정 */
+        html, body {
+            height: 100%;
+            margin: 0;
+            padding: 0;
+            overflow: hidden; /* 기본 스크롤바 숨김 */
+            background-color: #050608;
+            font-family: 'Pretendard', -apple-system, BlinkMacSystemFont, system-ui, Roboto, sans-serif;
+        }
+
+        /* 풀페이지 스크롤 스냅 컨테이너 */
+        .snap-container {
+            height: 100vh;
+            overflow-y: scroll;
+            scroll-snap-type: y mandatory; /* Y축 강제 스냅 */
+            scroll-behavior: smooth;
+            -webkit-overflow-scrolling: touch; /* iOS 부드러운 터치 스크롤 */
+        }
+
+        /* 각 스냅 섹션 */
+        .snap-section {
+            height: 100vh;
+            scroll-snap-align: start; /* 섹션 시작점에 착 감김 */
+            scroll-snap-stop: always; /* 한 번 스크롤에 한 페이지씩만 이동 */
+        }
+
+        /* 부드러운 페이드인 & 살짝 위로 떠오르는 등장 애니메이션 */
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(25px) scale(0.95);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0) scale(1);
+            }
+        }
+
+        /* 첫 번째 등장 (토끼) */
+        .animate-appear-1 {
+            opacity: 0;
+            animation: fadeInUp 1.1s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+            animation-delay: 0.2s;
+        }
+
+        /* 두 번째 연달아 등장 (앨리스) */
+        .animate-appear-2 {
+            opacity: 0;
+            animation: fadeInUp 1.1s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+            animation-delay: 0.6s;
+        }
+
+        /* 바운스 안내 화살표 */
+        @keyframes bounceSlow {
+            0%, 100% { transform: translateY(0); opacity: 0.5; }
+            50% { transform: translateY(8px); opacity: 1; }
+        }
+        .animate-bounce-slow {
+            animation: bounceSlow 2s infinite ease-in-out;
+        }
+    </style>
+</head>
+<body class="flex justify-center items-center">
+
+    <!-- 모바일 초대장 프레임 & 스냅 컨테이너 (배경: back.png) -->
+    <main class="snap-container relative w-full max-w-[480px] bg-black/60 shadow-2xl bg-cover bg-center"
+          style="background-image: linear-gradient(rgba(5, 6, 8, 0.35), rgba(5, 6, 8, 0.55)), url('back.png');">
+
+        <!-- ==========================================
+             PAGE 1: 메인 커버 (제목 + 토끼/앨리스)
+        =========================================== -->
+        <section class="snap-section relative w-full h-full flex flex-col items-center justify-between px-6 pt-12 pb-8">
+            
+            <!-- 1. 상단 메인 제목 (title.png) -->
+            <header class="w-full max-w-[260px] mt-2">
+                <img src="title.png" alt="MT Title" class="w-full h-auto mx-auto object-contain drop-shadow-[0_10px_20px_rgba(0,0,0,0.8)]">
+            </header>
+
+            <!-- 2. 중앙 캐릭터: 토끼(오른쪽) 먼저, 앨리스(왼쪽) 연달아 등장 -->
+            <div class="w-full flex items-center justify-center gap-4 px-2 my-auto">
+                <!-- 왼쪽: 앨리스 (두 번째 등장) -->
+                <div class="w-1/2 flex justify-center">
+                    <img src="alice.png" alt="Alice" class="animate-appear-2 max-w-[150px] w-full h-auto object-contain drop-shadow-[0_8px_16px_rgba(0,0,0,0.7)]">
+                </div>
+
+                <!-- 오른쪽: 토끼 (첫 번째 등장) -->
+                <div class="w-1/2 flex justify-center">
+                    <img src="rabbit.png" alt="Rabbit" class="animate-appear-1 max-w-[150px] w-full h-auto object-contain drop-shadow-[0_8px_16px_rgba(0,0,0,0.7)]">
+                </div>
+            </div>
+
+            <!-- 3. 하단 스크롤 안내 화살표 -->
+            <div class="flex flex-col items-center gap-1.5 cursor-pointer pb-2" onclick="scrollToNextPage()">
+                <span class="text-[10px] tracking-[0.2em] text-purple-200/60 uppercase">SCROLL DOWN</span>
+                <svg class="w-4 h-4 text-purple-300 animate-bounce-slow" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path>
+                </svg>
+            </div>
+        </section>
+
+
+        <!-- ==========================================
+             PAGE 2: 다음 페이지 (2번째 화면 예시)
+        =========================================== -->
+        <section id="page-2" class="snap-section relative w-full h-full flex flex-col items-center justify-center px-8 py-12 text-center bg-black/40 backdrop-blur-[2px]">
+            <div class="w-full max-w-sm flex flex-col items-center">
+                
+                <span class="text-xs font-mono tracking-widest text-purple-300/80 mb-2">2026. 11. 06 - 11. 07</span>
+                <h2 class="text-2xl font-bold text-white mb-6">이상한 나라에<br>당신을 초대합니다</h2>
+                
+                <p class="text-xs leading-relaxed text-zinc-300 font-light mb-8">
+                    시계 토끼를 따라 문을 열면,<br>
+                    우리가 만들어갈 시크릿한 여정이 시작됩니다.<br>
+                    잊지 못할 밤을 함께 만들어보세요!
+                </p>
+
+                <!-- 테스트용 버튼 -->
+                <button class="px-6 py-3 rounded-full bg-purple-600/80 hover:bg-purple-500 text-white text-xs font-medium tracking-wider border border-purple-400/30 transition shadow-lg shadow-purple-900/50">
+                    초대장 수락하기
+                </button>
+            </div>
+        </section>
+
+    </main>
+
+    <!-- 화살표 클릭 시 2페이지로 부드럽게 넘어가기 -->
+    <script>
+        function scrollToNextPage() {
+            document.getElementById('page-2').scrollIntoView({ behavior: 'smooth' });
+        }
+    </script>
+</body>
+</html>
